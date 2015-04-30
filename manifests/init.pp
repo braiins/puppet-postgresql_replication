@@ -1,4 +1,4 @@
-# == Class: postgresql-replication
+# == Class: postgresql_replication
 #
 # Basic setup of PostgreSQL server as a prerequisite for replication.
 # Uses puppetlabs/postgresql module to install the software and to set
@@ -18,7 +18,7 @@
 #
 # === Examples
 #
-#  class { 'postgresql-replication':
+#  class { 'postgresql_replication':
 #    allow_ip_range => '10.0.0.0/24',
 #    contrib        => true,
 #  }
@@ -31,15 +31,15 @@
 #
 # Copyright 2015 Braiins Systems s.r.o.
 #
-class postgresql-replication(
-  $version = $postgresql-replication::params::version,
-  $contrib = $postgresql-replication::params::contrib,
-  $test_user = $postgresql-replication::params::test_user,
-  $encoding = $postgresql-replication::params::encoding,
-  $listen_addresses = $postgresql-replication::params::listen_addresses,
-  $timezone = $postgresql-replication::params::timezone,
-  $allow_ip_range = $postgresql-replication::params::allow_ip_range
-) inherits postgresql-replication::params {
+class postgresql_replication (
+  $version = $postgresql_replication::params::version,
+  $contrib = $postgresql_replication::params::contrib,
+  $test_user = $postgresql_replication::params::test_user,
+  $encoding = $postgresql_replication::params::encoding,
+  $listen_addresses = $postgresql_replication::params::listen_addresses,
+  $timezone = $postgresql_replication::params::timezone,
+  $allow_ip_range = $postgresql_replication::params::allow_ip_range
+) inherits postgresql_replication::params {
 
   class { 'postgresql::globals':
     encoding            => $encoding,

@@ -1,6 +1,6 @@
-# == Class: postgresql-replication::params
+# == Class: postgresql_replication::params
 #
-# This class defines default parameters of the main postgresql-replication class
+# This class defines default parameters of the main postgresql_replication class
 #
 #
 # === Examples
@@ -16,7 +16,7 @@
 #
 # Copyright 2014 Braiins Systems s.r.o.
 #
-class postgresql-replication::params {
+class postgresql_replication::params {
   $version = '9.4',
   $contrib = false,
   $test_user = false,

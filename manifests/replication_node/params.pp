@@ -1,4 +1,4 @@
-# == Class: postgresql-replication::replication_node::params
+# == Class: postgresql_replication::replication_node::params
 #
 # This class defines default parameters of the replication_node class
 #
@@ -16,7 +16,7 @@
 #
 # Copyright 2015 Braiins Systems s.r.o.
 #
-class postgresql-replication::replication_node::params {
+class postgresql_replication::replication_node::params {
   $superuser = 'postgres',
   $master = false,
   $peer_name = undef,

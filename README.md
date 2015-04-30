@@ -1,11 +1,11 @@
-# postgresql-replication
+# postgresql_replication
 
 #### Table of Contents
 
 1. [Overview](#overview)
 2. [Module Description - What the module does and why it is useful](#module-description)
-3. [Setup - The basics of getting started with postgresql-replication](#setup)
-    * [What postgresql-replication affects](#what-postgresql-replication-affects)
+3. [Setup - The basics of getting started with postgresql_replication](#setup)
+    * [What postgresql_replication affects](#what-postgresql_replication-affects)
 4. [Usage - Configuration options and additional functionality](#usage)
 5. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
 5. [Limitations - OS compatibility, etc.](#limitations)
@@ -35,7 +35,7 @@ It uses the PostgreSQL's Log-Shipping mechanism in two ways simultaneously:
 
 ## Setup
 
-### What postgresql-replication affects
+### What postgresql_replication affects
 
 * the module deploys a new PostgreSQL server instance
 * it sets the server ready to accept TCP connections from a range of IP addresses

@@ -1,4 +1,4 @@
-# == Class: postgresql-replication::replication_node
+# == Class: postgresql_replication::replication_node
 #
 # Sets up a node of a replication HA cluster of PostgreSQL servers.
 #
@@ -22,7 +22,7 @@
 #
 # === Examples
 #
-#  class { 'postgresql-replication::replication_node':
+#  class { 'postgresql_replication::replication_node':
 #    master    => true,
 #    peer_name => '10.0.0.2',
 #    replication_seckey => 'puppet:///modules/id_rsa.postgres',
@@ -36,16 +36,16 @@
 #
 # Copyright 2015 Braiins Systems s.r.o.
 #
-class postgresql-replication::replication_node(
-  $master = $postgresql-replication::replication_node::params::master,
-  $peer_name = $postgresql-replication::replication_node::params::peer_name,
-  $version = $postgresql-replication::version,
-  $replication_pubkey = $postgresql-replication::replication_node::params::replication_pubkey,
-  $replication_seckey = $postgresql-replication::replication_node::params::replication_seckey,
-  $peerhost_pubkey = $postgresql-replication::replication_node::params::peerhost_pubkey,
-  $host_seckey = $postgresql-replication::replication_node::params::host_seckey,
-  $superuser = $postgresql-replication::replication_node::params::superuser,
-) inherits postgresql-replication::replication_node::params {
+class postgresql_replication::replication_node(
+  $master = $postgresql_replication::replication_node::params::master,
+  $peer_name = $postgresql_replication::replication_node::params::peer_name,
+  $version = $postgresql_replication::version,
+  $replication_pubkey = $postgresql_replication::replication_node::params::replication_pubkey,
+  $replication_seckey = $postgresql_replication::replication_node::params::replication_seckey,
+  $peerhost_pubkey = $postgresql_replication::replication_node::params::peerhost_pubkey,
+  $host_seckey = $postgresql_replication::replication_node::params::host_seckey,
+  $superuser = $postgresql_replication::replication_node::params::superuser,
+) inherits postgresql_replication::replication_node::params {
 
   # Replication user
   postgresql::server::role { 'replicator':
@@ -94,7 +94,7 @@ class postgresql-replication::replication_node(
     owner   => $superuser,
     group   => $superuser,
     mode    => '0750',
-    content => template('postgresql-replication/replication_node/create_clean_replica.sh.erb')
+    content => template('postgresql_replication/replication_node/create_clean_replica.sh.erb')
   }
 
   # exchange the SSH keys and make trust

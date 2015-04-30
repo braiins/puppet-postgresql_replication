@@ -1,12 +1,12 @@
 {
-  "name": "braiins-postgresql-replication",
+  "name": "braiins-postgresql_replication",
   "version": "0.1.0",
   "author": "braiins",
   "summary": "This module configures postgreSQL server with optional hot-standby replication and postgreSQL client.",
   "license": "Apache 2.0",
-  "source": "git://github.com/braiins/puppet-postgresql-replication.git",
-  "project_page": "https://github.com/braiins/puppet-postgresql-replication",
-  "issues_url": "https://github.com/braiins/puppet-postgresql-replication/issues",
+  "source": "git://github.com/braiins/puppet-postgresql_replication.git",
+  "project_page": "https://github.com/braiins/puppet-postgresql_replication",
+  "issues_url": "https://github.com/braiins/puppet-postgresql_replication/issues",
   "dependencies": [
     {
       "name": "puppetlabs-stdlib",
