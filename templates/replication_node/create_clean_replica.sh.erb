@@ -1,0 +1,19 @@
+echo Stopping PostgreSQL
+sudo service postgresql stop
+
+echo Cleaning up old cluster directory
+rm -rf /var/lib/postgresql/<%= @version %>/main
+
+echo Starting base backup as replicator
+pg_basebackup -h <%= @peer_name %> -D /var/lib/postgresql/<%= @version %>/main -U replicator -v -P
+
+echo Writing recovery.conf file
+bash -c "cat > /var/lib/postgresql/<%= @version %>/main/recovery.conf <<- _EOF1_
+standby_mode = 'on'
+primary_conninfo = 'host=<%= @peer_name %> user=replicator sslmode=require'
+trigger_file = '/tmp/postgresql.trigger'
+_EOF1_
+"
+
+echo Startging PostgreSQL
+sudo service postgresql start
