@@ -75,7 +75,6 @@ class postgresql_replication::replication_node(
     value => '8',
   }
 
-  #$user_home = getparam(User[$superuser], 'home')
   $superuser_home = '/var/lib/postgresql'
 
   # archive_command is set on both peers and enabled/disabled later
@@ -86,16 +85,16 @@ class postgresql_replication::replication_node(
   # overwrite the archive files on slave.
   postgresql::server::config_entry { 'archive_command':
     value => "scp %p ${peer_name}:${superuser_home}/${version}/main/pg_xlog/%f",
-  }
+  } ->
 
   # slave bootstrapping script:
-  file { "${superuser_home}/pg_create_clean_replica.sh":
+  file { "/usr/local/bin/pg_create_clean_replica.sh":
     ensure  => present,
-    owner   => $superuser,
-    group   => $superuser,
+    owner   => root,
+    group   => root,
     mode    => '0750',
     content => template('postgresql_replication/replication_node/create_clean_replica.sh.erb')
-  }
+  } ->
 
   # exchange the SSH keys and make trust
   file { "${superuser_home}/.ssh":
