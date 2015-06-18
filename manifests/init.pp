@@ -10,6 +10,7 @@
 # - sets timezone and internal character encoding
 # - makes the server accepting incomming TCP connections from a given IP range
 # - installs additional contrib stuff
+# - installs additional development libraries and files
 # - creates a test role - the first role aware of remote login
 #
 # === Parameters
@@ -32,13 +33,14 @@
 # Copyright 2015 Braiins Systems s.r.o.
 #
 class postgresql_replication (
-  $version = $postgresql_replication::params::version,
-  $contrib = $postgresql_replication::params::contrib,
-  $test_user = $postgresql_replication::params::test_user,
-  $encoding = $postgresql_replication::params::encoding,
+  $version          = $postgresql_replication::params::version,
+  $contrib          = $postgresql_replication::params::contrib,
+  $devel            = $postgresql_replication::params::devel,
+  $test_user        = $postgresql_replication::params::test_user,
+  $encoding         = $postgresql_replication::params::encoding,
   $listen_addresses = $postgresql_replication::params::listen_addresses,
-  $timezone = $postgresql_replication::params::timezone,
-  $allow_ip_range = $postgresql_replication::params::allow_ip_range
+  $timezone         = $postgresql_replication::params::timezone,
+  $allow_ip_range   = $postgresql_replication::params::allow_ip_range
 ) inherits postgresql_replication::params {
 
   class { 'postgresql::globals':
@@ -73,7 +75,11 @@ class postgresql_replication (
 
   # optionally install additional useful postgreSQL modules
   if ($contrib) {
-    class { 'postgresql::server::contrib':
-    }
+    class { 'postgresql::server::contrib': }
+  }
+
+  # optionally install development files
+  if ($devel) {
+    class { 'postgresql::lib::devel': }
   }
 }

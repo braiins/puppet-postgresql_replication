@@ -19,10 +19,10 @@
 class postgresql_replication::params {
   $version = '9.4',
   $contrib = false,
+  $devel = false,
   $test_user = false,
   $encoding = 'UTF8',
   $listen_addresses = '*',
   $timezone = 'UTC',
   $allow_ip_range = '127.0.0.1/32'
 }
-
