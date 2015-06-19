@@ -14,10 +14,10 @@
 #  $master              - boolean, is the node master?
 #  $peer_name           - peer's (the 2nd in the couple) hostname or IP
 #  $version             - PostgreSQL version - taken from parent class by default
-#  $replication_pubkey  - superuser' SSH pub key
-#  $replication_seckey  - superuser' SSH secret key
-#  $peerhost_pubkey     - peers SSH pub hostkey
+#  $user_seckey         - PostgreSQL superuser's SSH secret key
+#  $peeruser_pubkey     - peer PostgreSQL superuser's SSH pub key
 #  $host_seckey         - peers SSH secret hostkey
+#  $peerhost_pubkey     - peers SSH pub hostkey
 #  $superuser           - username of the superuser, 'postgres' by default
 #
 # === Examples
@@ -25,8 +25,7 @@
 #  class { 'postgresql_replication::replication_node':
 #    master    => true,
 #    peer_name => '10.0.0.2',
-#    replication_seckey => 'puppet:///modules/id_rsa.postgres',
-#    host_seckey => 'puppet:///modules/ssh_host_ecdsa_key',
+#  }
 #
 # === Authors
 #
@@ -40,8 +39,8 @@ class postgresql_replication::replication_node(
   $master = $postgresql_replication::replication_node::params::master,
   $peer_name = $postgresql_replication::replication_node::params::peer_name,
   $version = $postgresql_replication::version,
-  $replication_pubkey = $postgresql_replication::replication_node::params::replication_pubkey,
-  $replication_seckey = $postgresql_replication::replication_node::params::replication_seckey,
+  $peeruser_pubkey = $postgresql_replication::replication_node::params::peeruser_pubkey,
+  $user_seckey = $postgresql_replication::replication_node::params::user_seckey,
   $peerhost_pubkey = $postgresql_replication::replication_node::params::peerhost_pubkey,
   $host_seckey = $postgresql_replication::replication_node::params::host_seckey,
   $superuser = $postgresql_replication::replication_node::params::superuser,
@@ -53,12 +52,18 @@ class postgresql_replication::replication_node(
     login         => true,
   }
   # HBA entry for the peer and replication user
+  # Note: address must be either a hostname or an IP-range. Single host IP address
+  # (without mask or CIDR) is not accepted, therefore this regexp-matching is present.
+  # "\D" is a non-digit character, which, when present, determinines a hostname.
   postgresql::server::pg_hba_rule { 'allow slaves to connect':
     description => "Open up postgresql for access from hot stand-by server",
     type        => 'hostssl',
     database    => 'replication',
     user        => 'replicator',
-    address     => $peer_name,
+    address     => $peer_name ? {
+      /^(\D+)$/ => $peer_name,
+      default   => "${peer_name}/32",
+    },
     auth_method => 'trust',
   }
   # postgresql.conf replication setup
@@ -104,18 +109,18 @@ class postgresql_replication::replication_node(
     mode   => '0700',
   } ->
   file { "${superuser_home}/.ssh/id_rsa":
-    ensure => present,
-    owner  => $superuser,
-    group  => $superuser,
-    mode   => '0600',
-    source => $replication_seckey,
+    ensure  => present,
+    owner   => $superuser,
+    group   => $superuser,
+    mode    => '0600',
+    content => $user_seckey,
   } ->
   ssh_authorized_key {$superuser:
     ensure => present,
     user   => $superuser,
-    name   => $replication_pubkey['name'],
-    type   => $replication_pubkey['type'],
-    key    => $replication_pubkey['key'],
+    name   => $peeruser_pubkey['name'],
+    type   => $peeruser_pubkey['type'],
+    key    => $peeruser_pubkey['key'],
   }
 
   # exchange host keys and make trust
@@ -124,7 +129,7 @@ class postgresql_replication::replication_node(
     owner  => root,
     group  => root,
     mode   => '0600',
-    source => $host_seckey,
+    content => $host_seckey,
   }
   sshkey { $peer_name:
     target       => '/etc/ssh/ssh_known_hosts',
