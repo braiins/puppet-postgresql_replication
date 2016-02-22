@@ -17,12 +17,12 @@
 # Copyright 2015 Braiins Systems s.r.o.
 #
 class postgresql_replication::replication_node::params {
-  $superuser = 'postgres',
-  $master = false,
-  $peer_name = undef,
-  $version = '9.4',
-  $replication_pubkey = undef,
-  $replication_seckey = undef,
-  $host_seckey = undef,
+  $superuser = 'postgres'
+  $master = false
+  $peer_name = undef
+  $version = '9.4'
+  $replication_pubkey = undef
+  $replication_seckey = undef
+  $host_seckey = undef
   $peerhost_pubkey = undef
 }
